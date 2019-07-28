@@ -4,27 +4,36 @@ const wrap = require('word-wrap');
 const defaultSubjectSeparator = ': ';
 const defaultMaxLineWidth = 100;
 const defaultBreaklineChar = '|';
+const defaultTicketSeparator = ',';
 
-const addTicketNumber = (ticketNumber, config) => {
-  let result;
+const addTicketNumber = (ticketNumbers, skipTicketPrefix, config) => {
+  const separator = _.get(config, 'ticketSeparator', defaultTicketSeparator);
+  let results;
+  let tickets = ticketNumbers.trim().split(separator);
+  let skipPrefix = skipTicketPrefix && skipTicketPrefix === 'yes';
 
-  if (!ticketNumber) {
+  if (!ticketNumbers) {
     return '';
   }
 
-  result = ticketNumber.trim();
+  tickets.forEach(ticketNumber => {
+    let result = ticketNumber.trim();
 
-  if (config.ticketNumberPrefix) {
-    result = `${config.ticketNumberPrefix}${result}`;
-  }
+    if (config.ticketNumberPrefix && !skipPrefix) {
+      result = `${config.ticketNumberPrefix}${result}`;
+      // result = `${tickets.map(n => config.ticketNumberPrefix.concat(n.trim())).join(', ')} `;
+    }
 
-  if (config.ticketNumberSuffix || config.ticketNumberSuffix === '') {
-    result = `${result}${config.ticketNumberSuffix}`;
-  } else {
-    result = `${result} `;
-  }
+    if (config.ticketNumberSuffix || config.ticketNumberSuffix === '') {
+      result = `${result}${config.ticketNumberSuffix}`;
+    } else {
+      result = `${result} `;
+    }
 
-  return result;
+    results.push(result);
+  });
+
+  return results.join(', ');
 };
 
 const addScope = (scope, config) => {
@@ -85,7 +94,7 @@ module.exports = (answers, config) => {
     case 'first':
       // Hard limit this line
       head = (
-        addTicketNumber(answers.ticketNumber, config) +
+        addTicketNumber(answers.ticketNumber, answers.skipTicketPrefix, config) +
         addType(answers.type, config) +
         addScope(answers.scope, config) +
         addSubject(answers.subject)
@@ -97,7 +106,7 @@ module.exports = (answers, config) => {
         addType(answers.type, config) +
         addScope(answers.scope, config) +
         addSubject(answers.subject) +
-        addTicketNumber(answers.ticketNumber, config)
+        addTicketNumber(answers.ticketNumber, answers.skipTicketPrefix, config)
       ).slice(0, defaultMaxLineWidth);
       break;
     case 'standard':
@@ -106,7 +115,7 @@ module.exports = (answers, config) => {
       head = (
         addType(answers.type, config) +
         addScope(answers.scope, config) +
-        addTicketNumber(answers.ticketNumber, config) +
+        addTicketNumber(answers.ticketNumber, answers.skipTicketPrefix, config) +
         addSubject(answers.subject)
       ).slice(0, defaultMaxLineWidth);
       break;
