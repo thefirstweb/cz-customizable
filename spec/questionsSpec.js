@@ -56,36 +56,43 @@ describe('cz-customizable', () => {
     // question 4 - TICKET_NUMBER
     expect(getQuestion(4).name).toEqual('ticketNumber');
     expect(getQuestion(4).type).toEqual('input');
-    expect(getQuestion(4).message.indexOf('Enter the ticket number following this pattern')).toEqual(0);
+    expect(getQuestion(4).message.indexOf('Enter the ticket number[s] following this pattern')).toEqual(0);
     expect(getQuestion(4).validate()).toEqual(false); // mandatory question
 
+    // question 4 - OMIT_TICKET_PREFIX
+    expect(getQuestion(5).name).toEqual('omitTicketPrefix');
+    expect(getQuestion(5).type).toEqual('list');
+    expect(getQuestion(5).message.indexOf('Do you want to omit ticket prefix?')).toEqual(0);
+    expect(getQuestion(5).choices[0]).toEqual('no');
+    expect(getQuestion(5).choices[1]).toEqual('yes');
+
     // question 5 - SUBJECT
-    expect(getQuestion(5).name).toEqual('subject');
-    expect(getQuestion(5).type).toEqual('input');
-    expect(getQuestion(5).message).toMatch(/IMPERATIVE tense description/);
-    expect(getQuestion(5).filter('Subject')).toEqual('subject');
-    expect(getQuestion(5).validate('bad subject that exceed limit')).toEqual('Exceed limit: 20');
-    expect(getQuestion(5).validate('good subject')).toEqual(true);
+    expect(getQuestion(6).name).toEqual('subject');
+    expect(getQuestion(6).type).toEqual('input');
+    expect(getQuestion(6).message).toMatch(/IMPERATIVE tense description/);
+    expect(getQuestion(6).filter('Subject')).toEqual('subject');
+    expect(getQuestion(6).validate('bad subject that exceed limit')).toEqual('Exceed limit: 20');
+    expect(getQuestion(6).validate('good subject')).toEqual(true);
 
     // question 6 - BODY
-    expect(getQuestion(6).name).toEqual('body');
-    expect(getQuestion(6).type).toEqual('input');
+    expect(getQuestion(7).name).toEqual('body');
+    expect(getQuestion(7).type).toEqual('input');
 
     // question 7 - BREAKING CHANGE
-    expect(getQuestion(7).name).toEqual('breaking');
-    expect(getQuestion(7).type).toEqual('input');
-    expect(getQuestion(7).when({ type: 'feat' })).toEqual(true);
-    expect(getQuestion(7).when({ type: 'fix' })).toEqual(false);
+    expect(getQuestion(8).name).toEqual('breaking');
+    expect(getQuestion(8).type).toEqual('input');
+    expect(getQuestion(8).when({ type: 'feat' })).toEqual(true);
+    expect(getQuestion(8).when({ type: 'fix' })).toEqual(false);
 
     // question 8 - FOOTER
-    expect(getQuestion(8).name).toEqual('footer');
-    expect(getQuestion(8).type).toEqual('input');
-    expect(getQuestion(8).when({ type: 'fix' })).toEqual(true);
-    expect(getQuestion(8).when({ type: 'WIP' })).toEqual(false);
+    expect(getQuestion(9).name).toEqual('footer');
+    expect(getQuestion(9).type).toEqual('input');
+    expect(getQuestion(9).when({ type: 'fix' })).toEqual(true);
+    expect(getQuestion(9).when({ type: 'WIP' })).toEqual(false);
 
     // question 9, last one, CONFIRM COMMIT OR NOT
-    expect(getQuestion(9).name).toEqual('confirmCommit');
-    expect(getQuestion(9).type).toEqual('expand');
+    expect(getQuestion(10).name).toEqual('confirmCommit');
+    expect(getQuestion(10).type).toEqual('expand');
 
     const answers = {
       confirmCommit: 'yes',
@@ -93,16 +100,16 @@ describe('cz-customizable', () => {
       scope: 'myScope',
       subject: 'create a new cool feature',
     };
-    expect(getQuestion(9).message(answers)).toMatch('Are you sure you want to proceed with the commit above?');
+    expect(getQuestion(10).message(answers)).toMatch('Are you sure you want to proceed with the commit above?');
   });
 
   it('default length limit of subject should be 100', () => {
     config = {
       types: [{ value: 'feat', name: 'feat: my feat' }],
     };
-    expect(getQuestion(5).validate('good subject')).toEqual(true);
+    expect(getQuestion(6).validate('good subject')).toEqual(true);
     expect(
-      getQuestion(5).validate(
+      getQuestion(6).validate(
         'bad subject that exceed limit bad subject that exceed limitbad subject that exceed limit test test test'
       )
     ).toEqual('Exceed limit: 100');
@@ -110,7 +117,7 @@ describe('cz-customizable', () => {
 
   it('subject should be lowercased by default', () => {
     config = {};
-    expect(getQuestion(5).filter('Some subject')).toEqual('some subject');
+    expect(getQuestion(6).filter('Some subject')).toEqual('some subject');
   });
 
   it('subject should be capitilized when config property "upperCaseSubject" is set to true', () => {
@@ -118,7 +125,7 @@ describe('cz-customizable', () => {
       upperCaseSubject: true,
     };
 
-    expect(getQuestion(5).filter('some subject')).toEqual('Some subject');
+    expect(getQuestion(6).filter('some subject')).toEqual('Some subject');
   });
 
   describe('optional fixOverride and allowBreakingChanges', () => {
@@ -128,13 +135,13 @@ describe('cz-customizable', () => {
         scopes: [{ name: 'myScope' }],
         allowBreakingChanges: ['fix'],
       };
-      expect(getQuestion(7).name).toEqual('breaking');
+      expect(getQuestion(8).name).toEqual('breaking');
 
       const answers = {
         type: 'feat',
       };
 
-      expect(getQuestion(7).when(answers)).toEqual(false); // not allowed
+      expect(getQuestion(8).when(answers)).toEqual(false); // not allowed
     });
 
     it('should allow BREAKING CHANGE question when config property "allowBreakingChanges" specifies array of types and answer is one of those', () => {
@@ -143,13 +150,13 @@ describe('cz-customizable', () => {
         scopes: [{ name: 'myScope' }],
         allowBreakingChanges: ['fix', 'feat'],
       };
-      expect(getQuestion(7).name).toEqual('breaking');
+      expect(getQuestion(8).name).toEqual('breaking');
 
       const answers = {
         type: 'feat',
       };
 
-      expect(getQuestion(7).when(answers)).toEqual(true); // allowed
+      expect(getQuestion(8).when(answers)).toEqual(true); // allowed
     });
   });
 
