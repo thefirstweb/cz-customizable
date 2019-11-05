@@ -12,15 +12,12 @@ const isValidateTicketNo = (value, config) => {
     return true;
   }
   const separator = _.get(config, 'ticketSeparator', ',');
-  let tickets = value.split(separator);
-
+  const tickets = value.split(separator);
   const reg = new RegExp(config.ticketNumberRegExp);
-  for(v of tickets) {
-    if (v.trim().replace(reg, '') !== '') {
-      return false;
-    }
-  }
-  return true;
+
+  return tickets.every(v => {
+    return v.trim().replace(reg, '') === '';
+  });
 };
 
 module.exports = {
@@ -37,9 +34,9 @@ module.exports = {
       if (config.ticketNumberRegExp) {
         messages.ticketNumber =
           messages.ticketNumberPattern ||
-          `Enter the ticket numbers following this pattern (${config.ticketNumberRegExp})\n`;
+          `Enter the ticket number[s] following this pattern (${config.ticketNumberRegExp})\n`;
       } else {
-        messages.ticketNumber = 'Enter the ticket numbers:\n';
+        messages.ticketNumber = 'Enter the ticket number[s]:\n';
       }
     }
     messages.omitTicketPrefix = 'Do you want to omit ticket prefix?';
@@ -118,10 +115,7 @@ module.exports = {
         message: messages.omitTicketPrefix,
         choices: ['no', 'yes'],
         when() {
-          if(config.allowTicketNumber && config.ticketNumberPrefix && config.allowOmitTicketPrefix) {
-            return true;
-          }
-          return false;
+          return config.allowTicketNumber && config.ticketNumberPrefix && config.allowOmitTicketPrefix;
         },
       },
       {

@@ -7,14 +7,14 @@ const defaultBreaklineChar = '|';
 const defaultTicketSeparator = ',';
 
 const addTicketNumber = (ticketNumbers, skipTicketPrefix, config) => {
-  const separator = _.get(config, 'ticketSeparator', defaultTicketSeparator);
-  let results;
-  let tickets = ticketNumbers.trim().split(separator);
-  let skipPrefix = skipTicketPrefix && skipTicketPrefix === 'yes';
-
   if (!ticketNumbers) {
     return '';
   }
+
+  const separator = _.get(config, 'ticketSeparator', defaultTicketSeparator);
+  const results = [];
+  const tickets = ticketNumbers.trim().split(separator);
+  const skipPrefix = skipTicketPrefix && skipTicketPrefix === 'yes';
 
   tickets.forEach(ticketNumber => {
     let result = ticketNumber.trim();
