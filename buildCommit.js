@@ -79,38 +79,14 @@ module.exports = (answers, config) => {
     indent: '',
     width: defaultMaxLineWidth,
   };
-  let head;
 
-  switch (config.ticketNumberPosition) {
-    case 'first':
-      // Hard limit this line
-      head = (
-        addTicketNumber(answers.ticketNumber, config) +
-        addType(answers.type, config) +
-        addScope(answers.scope, config) +
-        addSubject(answers.subject)
-      ).slice(0, defaultMaxLineWidth);
-      break;
-    case 'last':
-      // Hard limit this line
-      head = (
-        addType(answers.type, config) +
-        addScope(answers.scope, config) +
-        addSubject(answers.subject) +
-        addTicketNumber(answers.ticketNumber, config)
-      ).slice(0, defaultMaxLineWidth);
-      break;
-    case 'standard':
-    default:
-      // Hard limit this line
-      head = (
-        addType(answers.type, config) +
-        addScope(answers.scope, config) +
-        addTicketNumber(answers.ticketNumber, config) +
-        addSubject(answers.subject)
-      ).slice(0, defaultMaxLineWidth);
-      break;
-  }
+  // Hard limit this line
+  // eslint-disable-next-line max-len
+  const head =
+    addType(answers.type, config) +
+    addScope(answers.scope, config) +
+    addTicketNumber(answers.ticketNumber, config) +
+    addSubject(answers.subject.slice(0, config.subjectLimit));
 
   // Wrap these lines at 100 characters
   let body = wrap(answers.body, wrapOptions) || '';
