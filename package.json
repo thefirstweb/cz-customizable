@@ -1,6 +1,6 @@
 {
   "version": "0.0.0-development",
-  "name": "cz-customizable",
+  "name": "@thefirstweb/cz-customizable",
   "description": "Commitizen customizable adapter following the conventional-changelog format.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -19,10 +19,10 @@
     "commit": "./standalone.js",
     "travis-deploy-once": "travis-deploy-once"
   },
-  "homepage": "https://github.com/leoforfree/cz-customizable",
+  "homepage": "https://github.com/thefirstweb/cz-customizable",
   "repository": {
     "type": "git",
-    "url": "https://github.com/leoforfree/cz-customizable.git"
+    "url": "https://github.com/thefirstweb/cz-customizable.git"
   },
   "author": "Leonardo Correa <leonardoanalista@gmail.com>",
   "contributors": [
