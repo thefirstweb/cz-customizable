@@ -12,6 +12,22 @@ Suitable for large teams working with multiple projects with their own commit sc
 
 You have two ways to use `cz-customizable`. Originally, this project started as a commitizen plugin (Option 1). We introduced the second option to run this `cz-customizable` in standalone mode (Option 2), just like any NodeJS script. It's recommended to use `Option 2` for simplicity. The way you configure is shared between both options.
 
+## Update from @thefirstweb
+
+This cz-customizable was fork from https://github.com/dudekaa/cz-customizable, and fetch update from original upstream https://github.com/leoforfree/cz-customizable.
+
+The only different is we extract "ticketNumberSuffix" feature from @dudekaa repository bue to our team's commit messages rule.
+Our goal is waiting for original repo merge/create "ticketNumberSuffix". When is happen, we will use original cz-customizable repository instead maintain our own one.
+
+Reference issue: https://github.com/leoforfree/cz-customizable/pull/102
+
+The first web 有發佈套件 @thefirstweb/cz-customizable，下載指令：
+
+`npm install @thefirstweb/cz-customizable --save-dev`
+
+2020/11/06
+* 版本是抓取官方的 v6.3.0，但因為有加上 ticketNumberSuffix feature，所以改成我們自己的 tag v1.0.0 並發布。
+
 
 ## Option 1 - cz-customizable as commitizen plugin
 
